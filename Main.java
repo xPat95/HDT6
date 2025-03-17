@@ -31,7 +31,11 @@ public class Main {
         }
 
         PokemonManager manager = new PokemonManager(factory);
-        manager.loadPokemons("pokemon_data.csv");
+
+        long startTime = System.nanoTime();
+        manager.loadPokemons("./HDT6/pokemon_data.csv");
+        long endTime = System.nanoTime();
+        System.out.println("Tiempo de carga de Pokémon: " + ((endTime - startTime) / 1_000_000.0) + " ms");
 
         boolean ejecutando = true;
         while (ejecutando) {
@@ -51,57 +55,108 @@ public class Main {
                 case 1:
                     System.out.print("Ingrese el nombre del Pokémon a agregar: ");
                     String nombreAgregar = scanner.nextLine();
+                    startTime = System.nanoTime();
                     String resultado = manager.addPokemonToCollection(nombreAgregar);
+                    endTime = System.nanoTime();
                     System.out.println(resultado);
+                    System.out.println("Tiempo de ejecución: " + ((endTime - startTime) / 1_000_000.0) + " ms");
                     break;
 
                 case 2:
                     System.out.print("Ingrese el nombre del Pokémon: ");
                     String nombre = scanner.nextLine();
+                    startTime = System.nanoTime();
                     Pokemon p = manager.getPokemon(nombre);
+                    endTime = System.nanoTime();
                     if (p != null) {
-                        System.out.println("Nombre: " + p.getName());
+                        System.out.println("\nNombre: " + p.getName());
+                        System.out.println("Número Pokédex: " + p.getPokedexNumber());
                         System.out.println("Tipo 1: " + p.getType1());
-                        System.out.println("Tipo 2: " + p.getType2());
+                        System.out.println("Tipo 2: " + (p.getType2().isEmpty() ? "Ninguno" : p.getType2()));
+                        System.out.println("Clasificación: " + p.getClassification());
+                        System.out.println("Altura: " + p.getHeight() + " m");
+                        System.out.println("Peso: " + p.getWeight() + " kg");
                         System.out.println("Habilidad: " + p.getAbility());
+                        System.out.println("Generación: " + p.getGeneration());
+                        System.out.println("Legendario: " + (p.isLegendary() ? "Sí" : "No"));
                     } else {
                         System.out.println("El Pokémon no existe en la base de datos.");
                     }
+                    System.out.println("Tiempo de ejecución: " + ((endTime - startTime) / 1_000_000.0) + " ms");
                     break;
 
                 case 3:
                     System.out.println("\nColección del usuario ordenada por Tipo 1:");
+                    startTime = System.nanoTime();
                     List<Pokemon> userCollection = manager.getUserCollectionSortedByType();
+                    endTime = System.nanoTime();
                     for (Pokemon poke : userCollection) {
-                        System.out.println("Nombre: " + poke.getName() + " | Tipo1: " + poke.getType1() + " | Tipo2: " + poke.getType2());
+                        System.out.println("Nombre: " + poke.getName());
+                        System.out.println("Número Pokédex: " + poke.getPokedexNumber());
+                        System.out.println("Tipo 1: " + poke.getType1());
+                        System.out.println("Tipo 2: " + (poke.getType2().isEmpty() ? "Ninguno" : poke.getType2()));
+                        System.out.println("Clasificación: " + poke.getClassification());
+                        System.out.println("Altura: " + poke.getHeight() + " m");
+                        System.out.println("Peso: " + poke.getWeight() + " kg");
+                        System.out.println("Habilidad: " + poke.getAbility());
+                        System.out.println("Generación: " + poke.getGeneration());
+                        System.out.println("Legendario: " + (poke.isLegendary() ? "Sí" : "No"));
+                        System.out.println("--------------------------------------");
                     }
+                    System.out.println("Tiempo de ejecución: " + ((endTime - startTime) / 1_000_000.0) + " ms");
                     break;
 
                 case 4:
                     System.out.println("\nTodos los Pokémon ordenados por Tipo 1:");
+                    startTime = System.nanoTime();
                     List<Pokemon> sortedPokemons = manager.getAllPokemonsSortedByType();
+                    endTime = System.nanoTime();
                     String currentType = "";
                     for (Pokemon poke : sortedPokemons) {
                         if (!poke.getType1().equals(currentType)) {
                             currentType = poke.getType1();
                             System.out.println("\n" + currentType + ":");
                         }
-                        System.out.println("  - " + poke.getName() + " | Tipo2: " + poke.getType2());
+                        System.out.println("Nombre: " + poke.getName());
+                        System.out.println("Número Pokédex: " + poke.getPokedexNumber());
+                        System.out.println("Tipo 1: " + poke.getType1());
+                        System.out.println("Tipo 2: " + (poke.getType2().isEmpty() ? "Ninguno" : poke.getType2()));
+                        System.out.println("Clasificación: " + poke.getClassification());
+                        System.out.println("Altura: " + poke.getHeight() + " m");
+                        System.out.println("Peso: " + poke.getWeight() + " kg");
+                        System.out.println("Habilidad: " + poke.getAbility());
+                        System.out.println("Generación: " + poke.getGeneration());
+                        System.out.println("Legendario: " + (poke.isLegendary() ? "Sí" : "No"));
+                        System.out.println("--------------------------------------");
                     }
+                    System.out.println("Tiempo de ejecución: " + ((endTime - startTime) / 1_000_000.0) + " ms");
                     break;
 
                 case 5:
                     System.out.print("Ingrese la habilidad del Pokémon a buscar: ");
                     String habilidad = scanner.nextLine();
+                    startTime = System.nanoTime();
                     List<Pokemon> filteredPokemons = manager.getPokemonsByAbility(habilidad);
+                    endTime = System.nanoTime();
                     if (filteredPokemons.isEmpty()) {
                         System.out.println("No se encontraron Pokémon con la habilidad: " + habilidad);
                     } else {
                         System.out.println("\nPokémon con la habilidad " + habilidad + ":");
                         for (Pokemon poke : filteredPokemons) {
-                            System.out.println("Nombre: " + poke.getName() + " | Tipo1: " + poke.getType1() + " | Tipo2: " + poke.getType2());
+                            System.out.println("Nombre: " + poke.getName());
+                            System.out.println("Número Pokédex: " + poke.getPokedexNumber());
+                            System.out.println("Tipo 1: " + poke.getType1());
+                            System.out.println("Tipo 2: " + (poke.getType2().isEmpty() ? "Ninguno" : poke.getType2()));
+                            System.out.println("Clasificación: " + poke.getClassification());
+                            System.out.println("Altura: " + poke.getHeight() + " m");
+                            System.out.println("Peso: " + poke.getWeight() + " kg");
+                            System.out.println("Habilidad: " + poke.getAbility());
+                            System.out.println("Generación: " + poke.getGeneration());
+                            System.out.println("Legendario: " + (poke.isLegendary() ? "Sí" : "No"));
+                            System.out.println("--------------------------------------");
                         }
                     }
+                    System.out.println("Tiempo de ejecución: " + ((endTime - startTime) / 1_000_000.0) + " ms");
                     break;
 
                 case 6:

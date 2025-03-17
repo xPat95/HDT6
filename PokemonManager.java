@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+
 public class PokemonManager {
     private Map<String, Pokemon> pokemonMap;
     private List<Pokemon> userCollection;
@@ -18,21 +19,53 @@ public class PokemonManager {
     public void loadPokemons(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-            br.readLine();
+            br.readLine(); // Saltar la primera línea (encabezado)
+    
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data.length >= 10) { 
-                    String name = data[1];
-                    String type1 = data[2];
-                    String type2 = data[3];
-                    String ability = data[4];
-                    pokemonMap.put(name, new Pokemon(name, type1, type2, ability));
+                String[] data = parseCSVLine(line);
+    
+                if (data.length >= 10) {
+                    String name = data[0].trim();
+                    int pokedexNumber = Integer.parseInt(data[1].trim());
+                    String type1 = data[2].trim();
+                    String type2 = data[3].trim();
+                    String classification = data[4].trim();
+                    double height = Double.parseDouble(data[5].trim());
+                    double weight = Double.parseDouble(data[6].trim());
+                    String ability = data[7].trim();
+                    int generation = Integer.parseInt(data[8].trim());
+                    boolean legendary = data[9].trim().equalsIgnoreCase("true");
+    
+                    pokemonMap.put(name, new Pokemon(name, pokedexNumber, type1, type2, classification, height, weight, ability, generation, legendary));
+                } else {
+                    System.err.println("Línea inválida: " + line);
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error al leer el archivo: " + e.getMessage());
+            throw new RuntimeException("Error al leer el archivo CSV: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error inesperado: " + e.getMessage());
         }
     }
+    
+    private String[] parseCSVLine(String line) {
+        List<String> values = new ArrayList<>();
+        boolean inQuotes = false;
+        StringBuilder sb = new StringBuilder();
+    
+        for (char c : line.toCharArray()) {
+            if (c == '\"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                values.add(sb.toString().trim());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        values.add(sb.toString().trim());
+        return values.toArray(new String[0]);
+    }    
 
     /**
      * @param name
