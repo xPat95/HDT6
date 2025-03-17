@@ -4,6 +4,12 @@ public class Pokemon {
     private String type2;
     private String ability;
 
+    /**
+     * @param name
+     * @param type1
+     * @param type2
+     * @param ability
+     */
     public Pokemon(String name, String type1, String type2, String ability) {
         this.name = name;
         this.type1 = type1;
